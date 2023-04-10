@@ -1,28 +1,50 @@
 import flet as ft
 
+
 def main(page: ft.Page):
-    page.title = "Flet counter example"
-    page.vertical_alignment = ft.MainAxisAlignment.CENTER
+    # the title of the app
+    page.title = "Flet Counter App"
 
-    txt_number = ft.TextField(value="0", text_align=ft.TextAlign.RIGHT, width=100)
+    # a light/bright theme
+    page.theme_mode = "light"
 
-    def minus_click(e):
-        txt_number.value = str(int(txt_number.value) - 1)
+    # use material 2 design theme | this is just to better mimic the Flutter example
+    page.theme = ft.Theme(use_material3=False)
+
+    # the page's alignment
+    page.horizontal_alignment = "center"
+    page.vertical_alignment = "center"
+
+    def increment_counter(e):
+        """Increment the value of the counter_text object by 1, and update the UI to reflect these changes."""
+        counter_text.value = str(int(counter_text.value) + 1)
         page.update()
 
-    def plus_click(e):
-        txt_number.value = str(int(txt_number.value) + 1)
-        page.update()
-
-    page.add(
-        ft.Row(
-            [
-                ft.IconButton(ft.icons.REMOVE, on_click=minus_click),
-                txt_number,
-                ft.IconButton(ft.icons.ADD, on_click=plus_click),
-            ],
-            alignment=ft.MainAxisAlignment.CENTER,
-        )
+    # the app's appbar
+    page.appbar = ft.AppBar(
+        title=ft.Text("Flet Demo Home Page", color=ft.colors.WHITE),  # a title of white color
+        bgcolor=ft.colors.BLUE,  # a blue background color
+        center_title=True  # center the title || without this, the title will be on the left
     )
 
-ft.app(main)
+    # text that contains the counter number to be incremented
+    counter_text = ft.Text("0", style=ft.TextThemeStyle.DISPLAY_MEDIUM)
+
+    # the app's FAB
+    page.floating_action_button = ft.FloatingActionButton(
+        content=ft.Icon(ft.icons.ADD, color=ft.colors.WHITE),
+        shape=ft.CircleBorder(),  # gives the button a round/circle shape
+        on_click=increment_counter,  # the callback to be executed when this button is clicked
+        tooltip="Increment",  # the text to be shown when this button is hovered
+        bgcolor=ft.colors.BLUE  # a blue background color
+    )
+
+    # adding our widgets/controls to the page/UI
+    page.add(
+        ft.Text("You have pushed the button this many times:"),
+        counter_text
+    )
+
+
+# open a browser tab containing the app | remove the view parameter to open in a native OS window
+ft.app(target=main, view=ft.WEB_BROWSER)
